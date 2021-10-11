@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+			crossorigin="anonymous"
+		></script>
+
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>MiniChat</title>
+	</head>
+
+
+	<body class="container">
+		<h1 class="mt-5">MiniChat</h1>
+		<hr />
+
+		<form id="miform">
+			<div class="row">
+				<div class="col-8">
+					<input type="text" id="TxtMensaje" class="form-control" placeholder="Mensaje" />
+				</div>
+
+				<div class="col-4">
+					<button type="submit" class="btn btn-primary">Enviar</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			<div class="col">
+				<ul id="misMensajes" class="mt-2">
+					
+				</ul>
+			</div>
+		</div>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+			integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+			crossorigin="anonymous"
+		></script>
+
+		<script>
+			const socket = io('https://react-socketio-basic.herokuapp.com');
+			//socket.on('mensaje-bienvenida', (data) => {
+			//		console.log(data);
+			//	});
+
+			//setTimeout(() => {
+			//		socket.emit('desdefront', 'Bienvenido al front');
+			//	}, 200);
+
+			//referencias al html
+			const form = document.querySelector('#miform');
+			const msg = document.querySelector('#misMensajes');
+			const TxtMensaje = document.querySelector('#TxtMensaje');
+
+			form.addEventListener('submit', (ev) => {
+				ev.preventDefault();
+
+				const nuevoMensaje = TxtMensaje.value;
+				
+				socket.emit('mensajeToServer', { texto: nuevoMensaje } );
+
+			});
+
+			socket.on('mensajeToServer', (data) =>{
+				console.log(data);
+				msg.innerHTML += `<li> ${data.texto} </li>`;
+			})
+
+
+
+
+		</script>
+	</body>
+</html>
